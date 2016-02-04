@@ -34,13 +34,19 @@ public class FrontBookkeeper855256 implements IFrontBookkeeper {
             } else if(splitted[0].equals("soldiers")){
                 die(splitted);
             } else if(splitted[0].equals("show") && !splitted[1].equals("soldier")){
-                displaySoldiers(splitted[1]);
+                if (i == array.length-1)
+                    displaySoldiers(splitted[1], true);
+                else 
+                    displaySoldiers(splitted[1], false);
             } else{
-                displayUnits(splitted[2]);
+                if (i == array.length-1)
+                    displayUnits(splitted[2], true);
+                else
+                    displayUnits(splitted[2], false);
             }
         }
         
-        return null;
+        return this.output;
     }
     
     private void createUnit(String news){
@@ -124,27 +130,32 @@ public class FrontBookkeeper855256 implements IFrontBookkeeper {
         } while (temp_soldier != last);
     }
     
-    private void displayUnits(String id) {
+    private void displayUnits(String id, boolean last) {
         int soldier_id = Integer.parseInt(id);
         if (this.units.containsKey(soldier_id)) {
             for (int i = 0; i < this.units.get(soldier_id).size(); i++) {
-                System.out.print(this.units.get(soldier_id).get(i));
+                this.output += this.units.get(soldier_id).get(i);
                 if (i != this.units.get(soldier_id).size()-1) {
-                    System.out.print(", ");
+                    this.output += ", ";
                 }else {
-                    System.out.print("\n");
+                    if (last == false)
+                        this.output += "\n";
                 }
             }
         }
     }
     
-    private void displaySoldiers(String unit_name) {
-        System.out.println(this.soldiers.get(unit_name));
+    private void displaySoldiers(String unit_name, boolean last) {
+        if (last == false)
+            this.output += this.soldiers.get(unit_name) + "\n";
+        else
+            this.output += this.soldiers.get(unit_name);
     }
     
     Map<String, List<Integer>> soldiers;
     Map<Integer, List<String>> units;
     Map<String, String> attachedTo;
+    String output = "";
     
     /**
      * @param args the command line arguments
@@ -173,6 +184,6 @@ public class FrontBookkeeper855256 implements IFrontBookkeeper {
                                 "show brigade_Ignatov",
                                 "show division_Dimitroff"  };
         
-        bk.updateFront(tasks);
+        System.out.println(bk.updateFront(tasks));
     }
 }
